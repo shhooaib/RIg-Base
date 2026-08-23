@@ -2,7 +2,7 @@
 
 interface Column<T> {
   key: string
-  header: string
+  header: React.ReactNode
   cellClass?: string
   render?: (item: T) => React.ReactNode
 }

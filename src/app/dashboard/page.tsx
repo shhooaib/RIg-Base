@@ -9,7 +9,8 @@ import { SetupChecklistButton } from '@/components/dashboard/setup-checklist-but
 import { useDashboardMetrics } from '@/hooks/use-dashboard-metrics'
 import { filterDashboardMetrics, getMetricPeriodHint } from '@/lib/dashboard/metric-filter'
 import { getComparisonLabel } from '@/lib/dashboard/date-ranges'
-import { Sparkles } from 'lucide-react'
+import { LayoutDashboard } from 'lucide-react'
+import { ICON_STROKE_NAV } from '@/lib/icons/lucide-nav'
 import { ModuleAccessGuard } from '@/components/rbac/module-access-guard'
 import { PermissionGate } from '@/components/rbac/permission-gate'
 
@@ -81,7 +82,7 @@ export default function DashboardPage() {
       ) : (
         <div className="text-center py-16 mb-8 border border-border-primary">
           <div className="w-14 h-14 border border-border-primary flex items-center justify-center mx-auto mb-4">
-            <Sparkles size={22} className="text-accent" />
+            <LayoutDashboard size={22} strokeWidth={ICON_STROKE_NAV} className="text-text-tertiary" />
           </div>
           <h2 className="font-serif text-xl font-medium mb-2">No metrics for this view</h2>
           <p className="text-text-secondary text-sm max-w-md mx-auto">

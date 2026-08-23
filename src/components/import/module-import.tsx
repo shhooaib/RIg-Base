@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 import { Modal } from '@/components/ui/modal'
 import type { ImportEntity, ImportModule, ImportResult, ImportSchema } from '@/lib/import/types'
 import { queryKeysForEntity } from '@/lib/import/execute'
+import { SeedDemoDataButton } from '@/components/inventory-supply-chain/seed-demo-data-button'
 
 type ModuleImportProps = {
   module: ImportModule
@@ -210,6 +211,8 @@ export function ModuleImport({ module, entity, label = 'Import data' }: ModuleIm
           </div>
         )}
       </div>
+
+      {(module === 'inventory' || module === 'supply_chain') && <SeedDemoDataButton />}
 
       <Modal open={showResult} onClose={() => setShowResult(false)} title="Import results">
         {result && (

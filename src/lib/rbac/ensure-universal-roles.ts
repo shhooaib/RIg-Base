@@ -58,11 +58,11 @@ export async function ensureUniversalRoles(
     const match = current.find((r) => r.name === template.name)
     if (match) {
       const normalized = normalizeRolePermissions(match.permissions)
-      const needsUpdate =
-        !isNestedPermissionMap(match.permissions) ||
+      const needsPermissionRefresh =
+        template.is_system &&
         JSON.stringify(normalized) !== JSON.stringify(template.permissions)
 
-      if (needsUpdate && template.is_system && (template.name === 'Owner' || template.name === 'Administrator')) {
+      if (needsPermissionRefresh) {
         const { error: updateError } = await supabase
           .from('roles')
           .update({
@@ -73,7 +73,7 @@ export async function ensureUniversalRoles(
           .eq('id', match.id)
         if (updateError) throw updateError
         await syncRoleModulePermissions(supabase, match.id, template.permissions)
-      } else if (!match.description) {
+      } else if (!match.description || match.description !== template.description) {
         await supabase
           .from('roles')
           .update({ description: template.description, is_system: template.is_system })

@@ -2,116 +2,54 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import {
-  DollarSign,
-  LayoutDashboard,
-  Package,
-  Truck,
-  UserCircle,
-  Users,
-  type LucideIcon,
-} from 'lucide-react'
-
-type ModuleTile = {
-  id: string
-  label: string
-  icon: LucideIcon
-  summary: string
-  features: string[]
-}
-
-const MODULES: ModuleTile[] = [
-  {
-    id: 'dashboard',
-    label: 'Dashboard',
-    icon: LayoutDashboard,
-    summary: 'Configurable KPIs tied to your enabled modules and reporting periods.',
-    features: ['Time-period filters', 'Module-aware metrics', 'AI insight requests'],
-  },
-  {
-    id: 'finance',
-    label: 'Finance',
-    icon: DollarSign,
-    summary: 'Revenue, expenses, and category reporting with import-ready ledgers.',
-    features: ['Revenue vs expense', 'Category breakdown', 'CSV / JSON import'],
-  },
-  {
-    id: 'hr',
-    label: 'Human Resources',
-    icon: Users,
-    summary: 'Employees, departments, roles, and shift-aware workforce structure.',
-    features: ['Role permissions', 'Department mapping', 'Status tracking'],
-  },
-  {
-    id: 'inventory',
-    label: 'Inventory',
-    icon: Package,
-    summary: 'SKU management, stock levels, and low-stock signals across categories.',
-    features: ['Stock alerts', 'Category filters', 'Bulk import'],
-  },
-  {
-    id: 'supply_chain',
-    label: 'Supply Chain',
-    icon: Truck,
-    summary: 'Suppliers, purchase orders, and procurement status in one pipeline.',
-    features: ['Vendor records', 'PO lifecycle', 'Supplier filters'],
-  },
-  {
-    id: 'crm',
-    label: 'CRM',
-    icon: UserCircle,
-    summary: 'Customer records, lead stages, and interaction history for your team.',
-    features: ['Lead tracking', 'Spend history', 'Status workflows'],
-  },
-]
+import { MARKETING_MODULES } from '@/lib/marketing/content'
+import { MarketingSectionHeader } from '@/components/marketing/marketing-section-header'
 
 export function ErpModuleGrid() {
-  const [activeId, setActiveId] = useState(MODULES[0].id)
-  const active = MODULES.find((m) => m.id === activeId) ?? MODULES[0]
+  const [activeId, setActiveId] = useState(MARKETING_MODULES[0].id)
+  const active = MARKETING_MODULES.find((m) => m.id === activeId) ?? MARKETING_MODULES[0]
+  const ActiveIcon = active.icon
 
   return (
-    <section id="modules" className="relative px-6 py-24 border-y border-border-primary/60 bg-bg-secondary/20 scroll-mt-32">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent" aria-hidden />
+    <section id="modules" className="relative px-6 py-24 border-y border-border-primary/70 bg-bg-primary scroll-mt-28">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-10 max-w-2xl">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="h-px w-8 bg-gradient-to-r from-accent/70 to-transparent" />
-            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-accent">ERP modules</p>
-          </div>
-          <h2 className="font-serif text-2xl sm:text-[2rem] font-medium tracking-tight text-text-primary leading-tight">
-            Six operational domains.
-            <span className="text-accent"> One connected system.</span>
-          </h2>
-          <p className="text-sm text-text-secondary mt-3 leading-relaxed">
-            Hover a module to inspect capabilities — each area shares the same workspace, permissions model, and data import tooling.
-          </p>
-        </div>
+        <MarketingSectionHeader
+          eyebrow="Modules"
+          title={
+            <>
+              Six integrated modules.
+              <span className="text-accent"> One permission model.</span>
+            </>
+          }
+          description="Dashboard plus finance, CRM, HR, inventory, and supply chain — same workspace, imports, and role controls throughout."
+          className="mb-12"
+        />
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-6 items-stretch">
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {MODULES.map((module) => {
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] gap-8 items-stretch">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+            {MARKETING_MODULES.map((module) => {
               const Icon = module.icon
               const isActive = module.id === activeId
               return (
                 <button
                   key={module.id}
                   type="button"
+                  data-active={isActive ? 'true' : 'false'}
                   onMouseEnter={() => setActiveId(module.id)}
                   onFocus={() => setActiveId(module.id)}
-                  className={`marketing-tile text-left rounded-xl border p-4 transition-all duration-300 ${
-                    isActive
-                      ? 'border-accent/50 bg-accent/10 shadow-[0_0_32px_rgba(197,160,89,0.15)] scale-[1.02]'
-                      : 'border-border-primary bg-bg-secondary hover:border-border-secondary hover:bg-bg-tertiary/60'
-                  }`}
+                  className="marketing-module-tile text-left rounded-lg border border-border-primary p-4"
                 >
                   <div
-                    className={`w-9 h-9 rounded-lg flex items-center justify-center mb-3 transition-colors duration-300 ${
-                      isActive ? 'bg-accent text-white' : 'bg-accent-muted text-accent'
+                    className={`w-9 h-9 rounded-md flex items-center justify-center mb-3 border transition-colors duration-200 ${
+                      isActive
+                        ? 'bg-accent border-accent text-[#0a0a0a]'
+                        : 'bg-bg-tertiary border-border-primary text-accent'
                     }`}
                   >
-                    <Icon size={17} strokeWidth={2} />
+                    <Icon size={17} strokeWidth={1.75} />
                   </div>
-                  <p className="text-sm font-semibold text-text-primary">{module.label}</p>
+                  <p className="text-sm font-medium text-text-primary leading-snug">{module.label}</p>
+                  <p className="text-[11px] text-text-tertiary mt-1">{module.tagline}</p>
                 </button>
               )
             })}
@@ -119,28 +57,26 @@ export function ErpModuleGrid() {
 
           <motion.div
             key={active.id}
-            initial={{ opacity: 0, x: 12 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3 }}
-            className="marketing-glass-panel-dark rounded-xl border border-border-primary p-6 lg:p-8 flex flex-col justify-center"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            className="rounded-xl border border-border-primary bg-bg-secondary/50 p-7 lg:p-8 flex flex-col justify-center"
           >
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-11 h-11 rounded-lg bg-accent/15 border border-accent/25 flex items-center justify-center">
-                <active.icon size={20} className="text-accent" strokeWidth={2} />
+            <div className="flex items-start gap-3.5 mb-5">
+              <div className="w-11 h-11 rounded-md bg-accent/10 border border-accent/20 flex items-center justify-center shrink-0">
+                <ActiveIcon size={20} className="text-accent" strokeWidth={1.75} />
               </div>
-              <h3 className="text-lg font-semibold text-text-primary">{active.label}</h3>
+              <div>
+                <h3 className="text-lg font-medium text-text-primary tracking-tight">{active.label}</h3>
+                <p className="text-sm text-text-tertiary mt-0.5">{active.tagline}</p>
+              </div>
             </div>
-            <p className="text-sm text-text-secondary leading-relaxed mb-6">{active.summary}</p>
-            <ul className="space-y-2">
-              {active.features.map((feature) => (
-                <li
-                  key={feature}
-                  className="flex items-center gap-2 text-sm text-text-secondary group/item"
-                >
-                  <span className="w-1 h-1 rounded-full bg-accent group-hover/item:scale-150 transition-transform duration-200" />
-                  <span className="group-hover/item:text-text-primary transition-colors duration-200">
-                    {feature}
-                  </span>
+            <p className="text-[15px] text-text-secondary leading-relaxed mb-6">{active.summary}</p>
+            <ul className="space-y-2.5 border-t border-border-primary pt-5">
+              {active.capabilities.map((feature) => (
+                <li key={feature} className="flex items-start gap-3 text-sm text-text-secondary">
+                  <span className="mt-2 w-1 h-1 rounded-full bg-accent shrink-0" aria-hidden />
+                  {feature}
                 </li>
               ))}
             </ul>

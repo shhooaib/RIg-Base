@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { createClient } from '@/lib/supabase/client'
@@ -6,31 +7,27 @@ import { useWorkspaceStore } from '@/store/workspace'
 import { getActiveOrganizationName } from '@/lib/workspace-access'
 import { usePermissions } from '@/hooks/use-permissions'
 import type { ModuleKey } from '@/lib/rbac/types'
-import { SIDEBAR_WIDTH_COLLAPSED, SIDEBAR_WIDTH_EXPANDED } from '@/lib/sidebar-layout'
+import { ERP_MODULE_KEYS } from '@/lib/rbac/constants'
+import { resolveSidebarWidth } from '@/lib/sidebar-layout'
 import { WorkspaceSwitcher } from '@/components/dashboard/workspace-switcher'
 import { SidebarBrandTitle, SidebarBrandCollapsed } from '@/components/dashboard/sidebar-brand-title'
+import { SidebarResizeHandle } from '@/components/dashboard/sidebar-resize-handle'
 import {
-  LayoutDashboard,
-  Users,
-  Package,
-  DollarSign,
-  Truck,
-  UserCircle,
   ChevronLeft,
   ChevronRight,
   LogOut,
-  Settings,
 } from 'lucide-react'
+import {
+  ICON_SIZE_NAV,
+  ICON_STROKE_NAV,
+  MODULE_NAV_ICONS,
+  mergeNavIconClass,
+} from '@/lib/icons/lucide-nav'
 import { toast } from 'sonner'
 
-const moduleIcons: Record<string, React.ElementType> = {
-  dashboard: LayoutDashboard,
-  hr: Users,
-  inventory: Package,
-  finance: DollarSign,
-  supply_chain: Truck,
-  crm: UserCircle,
-}
+const moduleIcons = MODULE_NAV_ICONS
+
+const SettingsIcon = MODULE_NAV_ICONS.settings
 
 const moduleLabels: Record<string, string> = {
   dashboard: 'Dashboard',
@@ -53,9 +50,24 @@ const moduleRoutes: Record<string, string> = {
 export function Sidebar() {
   const pathname = usePathname()
   const router = useRouter()
-  const { workspace, profile, memberships, sidebarOpen, toggleSidebar } = useWorkspaceStore()
+  const {
+    workspace,
+    profile,
+    memberships,
+    sidebarOpen,
+    sidebarWidth,
+    sidebarResizing,
+    toggleSidebar,
+    hydrateSidebarWidth,
+  } = useWorkspaceStore()
   const { canViewModule, roleName } = usePermissions()
   const supabase = createClient()
+
+  useEffect(() => {
+    hydrateSidebarWidth()
+  }, [hydrateSidebarWidth])
+
+  const width = resolveSidebarWidth(sidebarOpen, sidebarWidth)
 
   const activeOrganizationName = getActiveOrganizationName(
     workspace,
@@ -64,9 +76,9 @@ export function Sidebar() {
   )
 
   const activeModules = workspace?.modules
-    ? Object.entries(workspace.modules)
-        .filter(([key, active]) => active && canViewModule(key as ModuleKey))
-        .map(([key]) => key)
+    ? ERP_MODULE_KEYS.filter(
+        (key) => workspace.modules[key as keyof typeof workspace.modules] && canViewModule(key)
+      )
     : []
 
   async function handleLogout() {
@@ -85,7 +97,8 @@ export function Sidebar() {
 
   return (
     <motion.aside
-      animate={{ width: sidebarOpen ? SIDEBAR_WIDTH_EXPANDED : SIDEBAR_WIDTH_COLLAPSED }}
+      animate={{ width }}
+      transition={sidebarResizing ? { duration: 0 } : { duration: 0.3, ease: 'easeInOut' }}
       className="fixed left-0 top-0 h-screen bg-bg-secondary border-r border-border-primary flex flex-col z-20"
     >
       {sidebarOpen ? <SidebarBrandTitle /> : <SidebarBrandCollapsed />}
@@ -94,7 +107,7 @@ export function Sidebar() {
 
       <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto">
         {activeModules.map((module) => {
-          const Icon = moduleIcons[module] || LayoutDashboard
+          const Icon = moduleIcons[module as ModuleKey] ?? MODULE_NAV_ICONS.dashboard
           const route = moduleRoutes[module]
           const isActive = pathname === route || (module !== 'dashboard' && pathname.startsWith(route))
 
@@ -102,7 +115,7 @@ export function Sidebar() {
             <Link
               key={module}
               href={route}
-              className={`flex items-center gap-3 px-3 py-2.5 transition-colors relative ${
+              className={`group flex items-center gap-3 px-3 py-2.5 transition-colors relative ${
                 isActive
                   ? 'text-text-primary'
                   : 'text-text-tertiary hover:text-text-secondary'
@@ -114,7 +127,11 @@ export function Sidebar() {
                   className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-accent rounded-full"
                 />
               )}
-              <Icon size={18} strokeWidth={1.75} className="flex-shrink-0" />
+              <Icon
+                size={ICON_SIZE_NAV}
+                strokeWidth={ICON_STROKE_NAV}
+                className={mergeNavIconClass(isActive)}
+              />
               {sidebarOpen && (
                 <span className="text-sm font-medium tracking-wide">{moduleLabels[module]}</span>
               )}
@@ -127,22 +144,30 @@ export function Sidebar() {
         {canViewModule('settings') && (
         <Link
           href="/dashboard/settings"
-          className={`flex items-center gap-3 px-3 py-2.5 transition-colors ${
+          className={`group flex items-center gap-3 px-3 py-2.5 transition-colors ${
             pathname === '/dashboard/settings'
               ? 'text-text-primary'
               : 'text-text-tertiary hover:text-text-secondary'
           }`}
         >
-          <Settings size={18} strokeWidth={1.75} className="flex-shrink-0" />
+          <SettingsIcon
+            size={ICON_SIZE_NAV}
+            strokeWidth={ICON_STROKE_NAV}
+            className={mergeNavIconClass(pathname === '/dashboard/settings')}
+          />
           {sidebarOpen && <span className="text-sm">Settings</span>}
         </Link>
         )}
 
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-3 py-2.5 text-text-tertiary hover:text-danger transition-colors"
+          className="group w-full flex items-center gap-3 px-3 py-2.5 text-text-tertiary hover:text-danger transition-colors"
         >
-          <LogOut size={18} strokeWidth={1.75} className="flex-shrink-0" />
+          <LogOut
+            size={ICON_SIZE_NAV}
+            strokeWidth={ICON_STROKE_NAV}
+            className="flex-shrink-0 text-text-tertiary group-hover:text-danger"
+          />
           {sidebarOpen && <span className="text-sm">Sign out</span>}
         </button>
 
@@ -172,10 +197,15 @@ export function Sidebar() {
           }`}
           aria-label={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
         >
-          {sidebarOpen ? <ChevronLeft size={18} strokeWidth={1.75} /> : <ChevronRight size={18} strokeWidth={1.75} />}
+          {sidebarOpen ? (
+            <ChevronLeft size={ICON_SIZE_NAV} strokeWidth={ICON_STROKE_NAV} className="text-text-muted" />
+          ) : (
+            <ChevronRight size={ICON_SIZE_NAV} strokeWidth={ICON_STROKE_NAV} className="text-text-muted" />
+          )}
           {sidebarOpen && <span className="text-sm">Collapse</span>}
         </button>
       </div>
+      <SidebarResizeHandle />
     </motion.aside>
   )
 }

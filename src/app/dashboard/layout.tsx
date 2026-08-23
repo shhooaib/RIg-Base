@@ -5,14 +5,13 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { createClient } from '@/lib/supabase/client'
 import { useWorkspaceStore } from '@/store/workspace'
 import { Sidebar } from '@/components/dashboard/sidebar'
-import { DashboardBrand } from '@/components/dashboard/dashboard-brand'
 import { PermissionRouteGuard } from '@/components/rbac/permission-route-guard'
 import { rolesQueryKey } from '@/lib/rbac/query-keys'
-import { SIDEBAR_WIDTH_COLLAPSED, SIDEBAR_WIDTH_EXPANDED } from '@/lib/sidebar-layout'
+import { resolveSidebarWidth } from '@/lib/sidebar-layout'
 import { Loader2 } from 'lucide-react'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { setProfile, setWorkspace, setMemberships, sidebarOpen } = useWorkspaceStore()
+  const { setProfile, setWorkspace, setMemberships, sidebarOpen, sidebarWidth, sidebarResizing } = useWorkspaceStore()
   const supabase = createClient()
 
   const { data: profile, isLoading: profileLoading } = useQuery({
@@ -87,10 +86,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="min-h-screen flex relative">
       <Sidebar />
-      <DashboardBrand />
       <main
-        className="flex-1 min-w-0 transition-all duration-300"
-        style={{ marginLeft: sidebarOpen ? SIDEBAR_WIDTH_EXPANDED : SIDEBAR_WIDTH_COLLAPSED }}
+        className={`flex-1 min-w-0 ${sidebarResizing ? '' : 'transition-[margin] duration-300 ease-in-out'}`}
+        style={{ marginLeft: resolveSidebarWidth(sidebarOpen, sidebarWidth) }}
       >
         <PermissionRouteGuard />
         <div className="p-8 lg:p-10">

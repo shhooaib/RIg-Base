@@ -7,7 +7,7 @@ import { BRAND_NAME } from '@/lib/brand'
 const GRADIENT_WASH =
   'linear-gradient(135deg, rgba(197, 160, 89, 0.08) 0%, transparent 55%, rgba(197, 160, 89, 0.03) 100%)'
 
-type BrandMarkVariant = 'sidebar' | 'collapsed' | 'default' | 'hero' | 'footer'
+type BrandMarkVariant = 'sidebar' | 'collapsed' | 'default' | 'hero' | 'footer' | 'rb'
 
 type BrandMarkProps = {
   variant?: BrandMarkVariant
@@ -16,6 +16,7 @@ type BrandMarkProps = {
   showPlatform?: boolean
   tone?: 'light' | 'dark'
   wordmarkSize?: 'sm' | 'md' | 'lg' | 'xl'
+  appearance?: 'default' | 'silver'
 }
 
 function PlatformLabel({ size = 'sm' }: { size?: 'sm' | 'md' | 'lg' }) {
@@ -32,6 +33,60 @@ function PlatformLabel({ size = 'sm' }: { size?: 'sm' | 'md' | 'lg' }) {
       <span className={`font-semibold uppercase text-accent shrink-0 ${sizeClass}`}>Command</span>
       <span className="h-px flex-1 bg-gradient-to-l from-transparent to-accent/50" />
     </div>
+  )
+}
+
+function RbWordmark({
+  size = 'md',
+  className = '',
+  tone = 'dark',
+  appearance = 'default',
+}: {
+  size?: 'sm' | 'md' | 'lg' | 'xl'
+  className?: string
+  tone?: 'light' | 'dark'
+  appearance?: 'default' | 'silver'
+}) {
+  const sizeClass =
+    size === 'xl'
+      ? 'text-[2rem] sm:text-[2.35rem]'
+      : size === 'lg'
+        ? 'text-2xl'
+        : size === 'sm'
+          ? 'text-base'
+          : 'text-xl'
+
+  if (appearance === 'silver') {
+    return (
+      <p
+        className={`brand-rb-elegant font-serif font-medium leading-none tracking-[0.06em] ${sizeClass} ${className}`}
+        aria-hidden
+      >
+        <span className="brand-rb-metallic brand-rb-metallic-silver">
+          <span className="brand-rb-metallic-base">R</span>
+          <span className="brand-rb-metallic-shine" aria-hidden>
+            R
+          </span>
+        </span>
+        <span className="brand-rb-metallic brand-rb-metallic-gold">
+          <span className="brand-rb-metallic-base">B</span>
+          <span className="brand-rb-metallic-shine" aria-hidden>
+            B
+          </span>
+        </span>
+      </p>
+    )
+  }
+
+  const rigColor = tone === 'light' ? 'text-white' : 'text-text-primary'
+
+  return (
+    <p
+      className={`font-serif font-medium leading-none tracking-wide ${rigColor} ${sizeClass} ${className}`}
+    >
+      R
+      <span className="text-accent group-hover:text-accent-hover transition-colors duration-300">B</span>
+    </p>
   )
 }
 
@@ -65,6 +120,29 @@ function RigBaseWordmark({
   )
 }
 
+function MetallicWord({ children, metal }: { children: string; metal: 'silver' | 'gold' }) {
+  const metalClass = metal === 'silver' ? 'brand-rb-metallic-silver' : 'brand-rb-metallic-gold'
+
+  return (
+    <span className={`brand-rb-metallic ${metalClass} whitespace-nowrap`}>
+      <span className="brand-rb-metallic-base">{children}</span>
+      <span className="brand-rb-metallic-shine" aria-hidden>
+        {children}
+      </span>
+    </span>
+  )
+}
+
+/** Header wordmark — Rig in silver, Base in gold with subtle metallic shine */
+export function MetallicRigBaseWordmark({ className = '' }: { className?: string }) {
+  return (
+    <span className={`brand-rigbase-header ${className}`} aria-hidden>
+      <MetallicWord metal="silver">Rig</MetallicWord>
+      <MetallicWord metal="gold">Base</MetallicWord>
+    </span>
+  )
+}
+
 function BrandWrapper({
   href,
   className,
@@ -91,7 +169,16 @@ export function BrandMark({
   showPlatform = true,
   tone = 'dark',
   wordmarkSize = 'sm',
+  appearance = 'default',
 }: BrandMarkProps) {
+
+  if (variant === 'rb') {
+    return (
+      <BrandWrapper href={href} className={`inline-block group min-w-0 ${className}`}>
+        <RbWordmark tone={tone} size={wordmarkSize} appearance={appearance} />
+      </BrandWrapper>
+    )
+  }
 
   if (variant === 'collapsed') {
     return (
@@ -101,10 +188,7 @@ export function BrandMark({
           href={href}
           className="relative flex flex-col items-center justify-center py-4 px-1 group"
         >
-          <p className="font-serif text-xl font-medium leading-none tracking-wide text-text-primary">
-            R
-            <span className="text-accent group-hover:text-accent-hover transition-colors duration-300">B</span>
-          </p>
+          <RbWordmark tone={tone} />
           <div className="mt-2.5 h-px w-8 bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
         </BrandWrapper>
       </div>
@@ -116,8 +200,12 @@ export function BrandMark({
       <div className={`relative shrink-0 border-b border-border-primary overflow-hidden ${className}`}>
         <div className="absolute inset-0 pointer-events-none" aria-hidden style={{ background: GRADIENT_WASH }} />
         <BrandWrapper href={href} className="relative block px-4 py-5 group text-center">
-          {showPlatform && <PlatformLabel />}
-          <div className={showPlatform ? 'mt-2' : ''}>
+          {showPlatform ? (
+            <PlatformLabel />
+          ) : (
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-accent/50 to-transparent" aria-hidden />
+          )}
+          <div className="mt-2">
             <RigBaseWordmark tone={tone} />
           </div>
           <div className="mt-3 mx-auto h-px w-3/4 bg-gradient-to-r from-transparent via-accent/40 to-transparent" />

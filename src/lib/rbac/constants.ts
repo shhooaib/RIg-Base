@@ -15,11 +15,11 @@ export const PERMISSION_DEFINITIONS: { key: PermissionKey; label: string; descri
 
 export const MODULE_DEFINITIONS: { key: ModuleKey; label: string; route?: string }[] = [
   { key: 'dashboard', label: 'Dashboard', route: '/dashboard' },
+  { key: 'finance', label: 'Finance', route: '/dashboard/finance' },
+  { key: 'crm', label: 'CRM', route: '/dashboard/crm' },
   { key: 'hr', label: 'Human Resources', route: '/dashboard/hr' },
   { key: 'inventory', label: 'Inventory', route: '/dashboard/inventory' },
-  { key: 'finance', label: 'Finance', route: '/dashboard/finance' },
   { key: 'supply_chain', label: 'Supply Chain', route: '/dashboard/supply-chain' },
-  { key: 'crm', label: 'CRM', route: '/dashboard/crm' },
   { key: 'settings', label: 'Settings', route: '/dashboard/settings' },
 ]
 

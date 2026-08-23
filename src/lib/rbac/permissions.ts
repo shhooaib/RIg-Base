@@ -66,7 +66,7 @@ export const UNIVERSAL_ROLE_TEMPLATES: UniversalRoleTemplate[] = [
   {
     key: 'administrator',
     name: 'Administrator',
-    description: 'Runs the ERP on behalf of the owner. Manages users, roles, and data across modules.',
+    description: 'Runs the ERP on behalf of the owner. Manages users, roles, integrations, and data across modules.',
     isSystem: true,
     buildPermissions: (modules) =>
       mergeMaps(
@@ -80,17 +80,17 @@ export const UNIVERSAL_ROLE_TEMPLATES: UniversalRoleTemplate[] = [
             import: true,
             export: true,
             print: true,
-            manage: mod === 'hr',
+            manage: mod === 'hr' || mod === 'crm' || mod === 'finance',
             view_reports: true,
           })
         ),
-        modulePerms('settings', { view: true, edit: true, export: true, print: true, view_reports: true })
+        modulePerms('settings', { view: true, edit: true, manage: true, export: true, print: true, view_reports: true })
       ),
   },
   {
     key: 'manager',
     name: 'Manager',
-    description: 'Full control within assigned modules. Can approve records and manage module operations.',
+    description: 'Full control within assigned modules — CRM pipeline, finance operations, HR team management, and approvals.',
     isSystem: true,
     buildPermissions: (modules) =>
       forEnabledModules(modules, (mod) =>
@@ -113,7 +113,7 @@ export const UNIVERSAL_ROLE_TEMPLATES: UniversalRoleTemplate[] = [
   {
     key: 'staff',
     name: 'Staff',
-    description: 'Regular employee who can create and edit records within assigned modules.',
+    description: 'Regular employee — create and edit records, view module reports, and use day-to-day CRM/Finance/HR tools.',
     isSystem: true,
     buildPermissions: (modules) =>
       forEnabledModules(modules, (mod) =>

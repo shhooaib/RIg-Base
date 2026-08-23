@@ -1,5 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { ImportEntity, ImportModule, ImportResult, ImportSchema, WorkspaceImportContext } from '@/lib/import/types'
+import { EMPLOYEES_QUERY_ROOT } from '@/lib/hr/employees-data'
 import { normalizeRow } from '@/lib/import/validate'
 
 function productStatus(quantity: number, minStock: number): 'in_stock' | 'low_stock' | 'out_of_stock' {
@@ -256,7 +257,7 @@ export async function executeImport(
 export function queryKeysForEntity(entity: ImportEntity): string[] {
   switch (entity) {
     case 'employees':
-      return ['employees']
+      return [EMPLOYEES_QUERY_ROOT]
     case 'products':
       return ['products']
     case 'transactions':

@@ -702,6 +702,84 @@ select option {
     box-shadow 0.65s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* Hero workspace preview — futuristic app shell */
+.hero-workspace-shell {
+  position: relative;
+  isolation: isolate;
+}
+
+.hero-workspace-glow {
+  position: absolute;
+  inset: -20% -10% -30% -10%;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 40%, rgba(197, 160, 89, 0.14) 0%, transparent 62%),
+    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(255, 255, 255, 0.04) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-workspace-panel {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-workspace-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: linear-gradient(to bottom, black 0%, black 70%, transparent 100%);
+  pointer-events: none;
+}
+
+.hero-workspace-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  opacity: 0.85;
+}
+
+.hero-workspace-live {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--color-accent);
+  box-shadow: 0 0 10px rgba(197, 160, 89, 0.65);
+  animation: heroWorkspacePulse 2.4s ease-in-out infinite;
+}
+
+@keyframes heroWorkspacePulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.hero-workspace-metric {
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.hero-workspace-metric:hover {
+  border-color: rgba(197, 160, 89, 0.18);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 .hero-preview-expand {
   display: grid;
   grid-template-rows: 0fr;
@@ -767,6 +845,10 @@ select option {
   background: var(--color-accent-hover);
 }
 
+.marketing-btn-primary-shadow {
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
 .marketing-step-hover {
   transition: border-color 0.3s ease;
 }
@@ -802,6 +884,274 @@ select option {
 .marketing-cta-panel:hover {
   border-color: rgba(197, 160, 89, 0.45);
   box-shadow: 0 0 48px rgba(197, 160, 89, 0.08);
+}
+
+/* Marketing / landing */
+.marketing-page {
+  --marketing-border: rgba(255, 255, 255, 0.08);
+  --marketing-surface: rgba(14, 14, 14, 0.72);
+}
+
+.marketing-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.marketing-section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 3vw, 2.125rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: var(--color-text-primary);
+}
+
+.marketing-hero-title {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.06;
+  color: #f5f2eb;
+}
+
+.marketing-hero-lead {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: rgba(240, 237, 230, 0.72);
+  max-width: 34rem;
+}
+
+.marketing-hero-lead-home {
+  font-size: clamp(1.03125rem, 1.65vw, 1.1875rem);
+  line-height: 1.75;
+  max-width: 36rem;
+  color: rgba(240, 237, 230, 0.78);
+}
+
+/* Header — metallic Rig Base wordmark (silver Rig, gold Base) */
+.brand-rigbase-header {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.32em;
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+@media (min-width: 640px) {
+  .brand-rigbase-header {
+    font-size: 1.1875rem;
+  }
+}
+
+/* Metallic word treatment — header + RB lockup */
+
+.marketing-trust-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--marketing-border);
+}
+
+.marketing-trust-item {
+  font-size: 0.8125rem;
+  color: rgba(240, 237, 230, 0.55);
+  letter-spacing: 0.01em;
+}
+
+.marketing-trust-item strong {
+  color: rgba(240, 237, 230, 0.88);
+  font-weight: 500;
+}
+
+.marketing-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8125rem 1.625rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #0a0a0a;
+  background: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: 0.125rem;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.marketing-btn-primary:hover {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+.marketing-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.8125rem 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(240, 237, 230, 0.55);
+  transition: color 0.2s ease;
+}
+
+.marketing-btn-ghost:hover {
+  color: rgba(240, 237, 230, 0.92);
+}
+
+.marketing-pillar {
+  border: 1px solid var(--color-border-primary);
+  background: rgba(10, 10, 10, 0.55);
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.marketing-pillar:hover {
+  border-color: rgba(197, 160, 89, 0.22);
+  background: rgba(12, 12, 12, 0.85);
+}
+
+.marketing-module-tile {
+  transition: border-color 0.25s ease, background-color 0.25s ease;
+}
+
+.marketing-module-tile[data-active='true'] {
+  border-color: rgba(197, 160, 89, 0.45);
+  background: rgba(197, 160, 89, 0.08);
+}
+
+.marketing-module-tile:not([data-active='true']):hover {
+  border-color: var(--color-border-secondary);
+  background: var(--color-bg-tertiary);
+}
+
+.marketing-cta-panel {
+  background: linear-gradient(145deg, rgba(197, 160, 89, 0.06) 0%, rgba(10, 10, 10, 0.95) 45%);
+}
+
+/* Metallic word treatment — header + RB lockup */
+@keyframes brandRbShineSweep {
+  0%,
+  20% {
+    background-position: 130% center;
+    opacity: 0;
+  }
+  24% {
+    opacity: 1;
+  }
+  48% {
+    background-position: -30% center;
+    opacity: 1;
+  }
+  52%,
+  100% {
+    background-position: -30% center;
+    opacity: 0;
+  }
+}
+
+.brand-rb-elegant {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.05em;
+}
+
+.brand-rb-metallic {
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+}
+
+.brand-rb-metallic-base {
+  position: relative;
+  z-index: 1;
+}
+
+.brand-rb-metallic-silver .brand-rb-metallic-base {
+  color: #b8b8b8;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.22),
+    0 -1px 0 rgba(0, 0, 0, 0.48),
+    0 2px 4px rgba(0, 0, 0, 0.22);
+}
+
+.brand-rb-metallic-gold .brand-rb-metallic-base {
+  color: #c5a059;
+  text-shadow:
+    0 1px 0 rgba(255, 228, 170, 0.28),
+    0 -1px 0 rgba(48, 32, 8, 0.42),
+    0 2px 5px rgba(0, 0, 0, 0.24);
+}
+
+.brand-rb-metallic-shine {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-size: 220% 100%;
+  animation: brandRbShineSweep 14s cubic-bezier(0.42, 0, 0.18, 1) infinite;
+}
+
+.brand-rb-metallic-silver .brand-rb-metallic-shine {
+  background-image: linear-gradient(
+    100deg,
+    transparent 0%,
+    transparent 38%,
+    rgba(255, 255, 255, 0.15) 44%,
+    rgba(255, 255, 255, 0.95) 50%,
+    rgba(220, 220, 220, 0.35) 56%,
+    transparent 62%,
+    transparent 100%
+  );
+}
+
+.brand-rb-metallic-gold .brand-rb-metallic-shine {
+  background-image: linear-gradient(
+    100deg,
+    transparent 0%,
+    transparent 38%,
+    rgba(255, 240, 190, 0.2) 44%,
+    rgba(255, 248, 210, 0.95) 50%,
+    rgba(212, 176, 106, 0.45) 56%,
+    transparent 62%,
+    transparent 100%
+  );
+  animation-delay: 0.35s;
+}
+
+.group:hover .brand-rb-metallic-silver .brand-rb-metallic-base {
+  color: #d0d0d0;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.32),
+    0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 0 12px rgba(200, 200, 200, 0.2);
+}
+
+.group:hover .brand-rb-metallic-gold .brand-rb-metallic-base {
+  color: #d4b06a;
+  text-shadow:
+    0 1px 0 rgba(255, 240, 190, 0.35),
+    0 -1px 0 rgba(48, 32, 8, 0.38),
+    0 0 14px rgba(197, 160, 89, 0.28);
+}
+
+.group:hover .brand-rb-metallic-shine {
+  animation-duration: 11s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-rb-metallic-shine {
+    animation: none;
+    opacity: 0;
+  }
 }
 
 @keyframes pulseDot {

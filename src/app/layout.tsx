@@ -29,8 +29,9 @@ const playfairStats = Playfair({
 })
 
 export const metadata: Metadata = {
-  title: 'Rig Base',
-  description: 'Your personalized business management platform',
+  title: 'Rig Base — Business operations workspace',
+  description:
+    'Finance, CRM, HR, inventory, and supply chain in one governed workspace. Role-based access, linked procurement, and reporting built for operators.',
 }
 
 export default function RootLayout({

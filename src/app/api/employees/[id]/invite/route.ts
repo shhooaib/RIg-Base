@@ -57,8 +57,10 @@ export async function POST(_request: Request, context: RouteContext) {
     .from('employees')
     .update({
       status: 'invited',
+      lifecycle_stage: 'onboarding',
       invite_token: inviteToken,
       invited_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     })
     .eq('id', id)
     .select('id, email, full_name, invite_token, invited_at, status')

@@ -2,7 +2,12 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
-import { AlertCircle, Loader2, Sparkles } from 'lucide-react'
+import { AlertCircle, Loader2 } from 'lucide-react'
+import {
+  ICON_SIZE_NAV,
+  ICON_STROKE_NAV,
+  INSIGHTS_ICON,
+} from '@/lib/icons/lucide-nav'
 import type { AiInsightSuggestion, AiInsightsResponse } from '@/lib/dashboard/ai-insights'
 import type { TimePeriod } from '@/lib/types'
 
@@ -74,11 +79,11 @@ export function AiSuggestionsPanel({ timePeriod }: AiSuggestionsPanelProps) {
       className="ai-card border border-border-primary p-6 mb-8"
     >
       <div className="flex items-start gap-3 mb-4">
-        <div className="w-9 h-9 bg-accent-muted flex items-center justify-center flex-shrink-0">
-          <Sparkles size={18} className="text-accent" />
+        <div className="w-9 h-9 border border-border-primary bg-bg-tertiary flex items-center justify-center flex-shrink-0">
+          <INSIGHTS_ICON size={ICON_SIZE_NAV} strokeWidth={ICON_STROKE_NAV} className="text-text-tertiary" />
         </div>
         <div className="flex-1">
-          <h2 className="font-serif font-medium text-base">AI business suggestions</h2>
+          <h2 className="font-serif font-medium text-base">Business insights</h2>
           <p className="text-xs text-text-tertiary mt-0.5">
             Request one personalized analysis per day based on your dashboard metrics.
           </p>
@@ -99,12 +104,12 @@ export function AiSuggestionsPanel({ timePeriod }: AiSuggestionsPanelProps) {
 
       {isChecking ? (
         <div className="flex items-center gap-3 py-6 justify-center text-sm text-text-secondary">
-          <Loader2 size={18} className="animate-spin text-accent" />
+          <Loader2 size={18} strokeWidth={ICON_STROKE_NAV} className="animate-spin text-text-tertiary" />
           Checking for today&apos;s insight…
         </div>
       ) : isGenerating ? (
         <div className="flex items-center gap-3 py-8 justify-center text-sm text-text-secondary">
-          <Loader2 size={18} className="animate-spin text-accent" />
+          <Loader2 size={18} strokeWidth={ICON_STROKE_NAV} className="animate-spin text-text-tertiary" />
           Analyzing your metrics…
         </div>
       ) : insight ? (
@@ -151,8 +156,8 @@ export function AiSuggestionsPanel({ timePeriod }: AiSuggestionsPanelProps) {
             disabled={isGenerating}
             className="inline-flex items-center gap-2 btn-primary disabled:opacity-50"
           >
-            <Sparkles size={16} />
-            Get AI insight
+            <INSIGHTS_ICON size={16} strokeWidth={ICON_STROKE_NAV} />
+            Generate insight
           </button>
           <p className="text-[11px] text-text-tertiary mt-3">One request per day.</p>
         </div>
